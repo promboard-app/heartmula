@@ -2,6 +2,10 @@
 
 PromBoard 커뮤니티 플러그인입니다. 캔버스에 **HeartMuLa 노래** 노드 하나를 더합니다. 가사(글)와 스타일 태그를 넣으면 목소리와 반주가 함께 든 노래를 최대 4분까지 만듭니다. [HeartMuLa](https://github.com/HeartMuLa/heartlib) oss-3B(happy-new-year 판)가 소리 토큰을 만들고 HeartCodec(20260123)이 48kHz 스테레오로 바꿉니다. 가사 언어는 한국어 · 영어 · 중국어 · 일본어 · 스페인어입니다(모델 카드 언어 태그).
 
+![가사 · 스타일 태그 → HeartMuLa 3B(소리 토큰) → HeartCodec → 48kHz 노래 WAV](docs/pipeline.png)
+
+노드 안에서 일어나는 순서입니다(`docs/scripts/pipeline.py` 로 그림).
+
 > 미검증: 이 플러그인은 아직 끝까지 돌려 보지 못했습니다(앱에 '검증 안 됨'으로 보입니다). 한국어 가사 품질도 아직 들어 보지 못했습니다. 결과 그림 · 소리는 실제로 돌려 본 뒤 넣습니다.
 
 ## 노드
@@ -52,6 +56,10 @@ nodes/requirements-*.txt       파이썬 패키지 잠금 파일(torch 는 앱�
 ## English
 
 A PromBoard community plugin. It adds one **HeartMuLa song** node: give it lyrics (text) and style tags and it makes a song with vocals and accompaniment, up to 4 minutes. [HeartMuLa](https://github.com/HeartMuLa/heartlib) oss-3B (happy-new-year) generates the audio tokens and HeartCodec (20260123) decodes them to 48 kHz stereo. Lyrics languages: Korean, English, Chinese, Japanese and Spanish (model card language tags).
+
+![Lyrics and style tags → HeartMuLa 3B (audio tokens) → HeartCodec → 48 kHz song WAV](docs/pipeline.png)
+
+What happens inside the node, in order (drawn by `docs/scripts/pipeline.py`).
 
 > Not verified: this plugin has not been run end to end yet (the app shows it as unverified), and Korean lyrics have not been listened to. Results will be added after a real run.
 
