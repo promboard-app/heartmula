@@ -1,0 +1,209 @@
+{
+  "schema": 1,
+  "id": "promboard.heartmula",
+  "version": "1.0.0",
+  "name": "HeartMuLa — 가사로 노래 만들기",
+  "description": "HeartMuLa(3B, happy-new-year 판)로 가사와 스타일 태그에서 노래(목소리 + 반주)를 최대 4분까지 만든다. 가사는 [Verse] · [Chorus] 같은 구간 표시와 함께 줄마다 적고, 스타일은 쉼표로 이은 영어 낱말(장르 · 악기 · 분위기 · 목소리)로 적는다. 언어 태그에 한국어가 있다. HeartCodec(20260123)이 48kHz 스테레오로 바꾼다. 코드 · 가중치 모두 Apache-2.0.",
+  "author": "PromBoard",
+  "license": "Apache-2.0",
+  "app": ">=1.0.3",
+  "categories": [
+    "music"
+  ],
+  "languages": [
+    "ko",
+    "en",
+    "zh",
+    "ja",
+    "es"
+  ],
+  "unverified": true,
+  "repository": "https://github.com/promboard-app/heartmula",
+  "icon": "icon.png",
+  "contents": [
+    "nodes"
+  ],
+  "nodes": [
+    {
+      "id": "song",
+      "label": "HeartMuLa 노래",
+      "description": "가사(글)를 이으면 스타일 태그대로 노래를 만든다. 결과는 48kHz 스테레오 WAV. 정한 길이 전에 곡이 끝나면 거기서 멈춘다. 1분 곡에 몇 분 걸린다.",
+      "layout": "single",
+      "inputs": [
+        {
+          "id": "lyrics",
+          "type": "text",
+          "label": "가사",
+          "required": true
+        }
+      ],
+      "outputs": [
+        {
+          "id": "audio",
+          "type": "audio",
+          "label": "노래"
+        }
+      ],
+      "settings": [
+        {
+          "id": "tags",
+          "label": "스타일 태그",
+          "help": "쉼표로 이은 영어 낱말. 장르 · 악기 · 분위기 · 목소리를 적는다(예: k-pop,female vocal,synthesizer,upbeat).",
+          "type": "text",
+          "default": "pop,piano,female vocal,happy",
+          "maxLength": 300
+        },
+        {
+          "id": "duration",
+          "label": "길이(초)",
+          "help": "최대 길이. 가사가 먼저 끝나면 곡도 먼저 끝난다.",
+          "type": "integer",
+          "default": 60,
+          "min": 10,
+          "max": 240
+        },
+        {
+          "id": "cfg",
+          "label": "태그 따르기",
+          "help": "클수록 스타일 태그 · 가사를 더 따르고 작을수록 자유롭다. 1 은 따르기를 끈다(더 빠름).",
+          "type": "number",
+          "default": 1.5,
+          "min": 1.0,
+          "max": 5.0,
+          "step": 0.1
+        },
+        {
+          "id": "temperature",
+          "label": "다양성",
+          "help": "클수록 더 다양하고 작을수록 안정적이다.",
+          "type": "number",
+          "default": 1.0,
+          "min": 0.5,
+          "max": 1.5,
+          "step": 0.05
+        },
+        {
+          "id": "topk",
+          "label": "후보 수(top-k)",
+          "help": "다음 소리 토큰을 고를 후보 수.",
+          "type": "integer",
+          "default": 50,
+          "min": 1,
+          "max": 200
+        },
+        {
+          "id": "seed",
+          "label": "시드",
+          "help": "같은 시드 · 같은 가사면 같은 곡이 나온다.",
+          "type": "integer",
+          "default": 42,
+          "min": 0,
+          "max": 2147483647
+        }
+      ]
+    }
+  ],
+  "python": {
+    "version": "3.12",
+    "torch": "host",
+    "lock": {
+      "win": "nodes/requirements-win.txt",
+      "linux": "nodes/requirements-linux.txt",
+      "mac": "nodes/requirements-mac.txt"
+    },
+    "entry": "nodes.main"
+  },
+  "gpu": {
+    "vramMinMb": 12288,
+    "cpuAllowed": false
+  },
+  "permissions": {},
+  "requires": {
+    "models": [
+      {
+        "source": "huggingface",
+        "repo": "HeartMuLa/HeartMuLaGen",
+        "revision": "2e18e01702011f4f7dc8642b6260967df62417ea",
+        "license": "Apache-2.0",
+        "files": [
+          {
+            "path": "gen_config.json",
+            "bytes": 101,
+            "sha256": "2fc578fc8d8445fa9d73d1925146d53d25b2e5f5d74b8a19aa5c000e37094f41"
+          },
+          {
+            "path": "tokenizer.json",
+            "bytes": 9085657,
+            "sha256": "79e3e522635f3171300913bb421464a87de6222182a0570b9b2ccba2a964b2b4"
+          }
+        ]
+      },
+      {
+        "source": "huggingface",
+        "repo": "HeartMuLa/HeartMuLa-oss-3B-happy-new-year",
+        "revision": "41f6fc68490e11dc43fdabaa6b5767946408c903",
+        "license": "Apache-2.0",
+        "files": [
+          {
+            "path": "config.json",
+            "bytes": 308,
+            "sha256": "a05bf0650f560d235fb3a0c109173d44eb3a9b6231fe599968e12706cd20edf4"
+          },
+          {
+            "path": "model.safetensors.index.json",
+            "bytes": 22579,
+            "sha256": "a96e28d71e3f767c94a7d25723f7ab77ce2abd06d5495315d9770be0e87e00ca"
+          },
+          {
+            "path": "model-00001-of-00004.safetensors",
+            "bytes": 4933188000,
+            "sha256": "4815367cdbddc0192abe3dbe81e2ae6a6e8978a39ad4dd1d26a20e445b3aeea6"
+          },
+          {
+            "path": "model-00002-of-00004.safetensors",
+            "bytes": 4932808592,
+            "sha256": "f079416ba4c0570231f7a2830a2e95033336a8b3528d1c033a07923a25f4b5d7"
+          },
+          {
+            "path": "model-00003-of-00004.safetensors",
+            "bytes": 4935901576,
+            "sha256": "b43cd60ff50033fa9a5e08c4eb26edff55d5e95e0a313592804ab026ed3b895d"
+          },
+          {
+            "path": "model-00004-of-00004.safetensors",
+            "bytes": 950588000,
+            "sha256": "07c5f5820c0c00f0b8ad4544ed8a24ae1888f7d8c8a5d8bb3cdaba418a39cf2f"
+          }
+        ]
+      },
+      {
+        "source": "huggingface",
+        "repo": "HeartMuLa/HeartCodec-oss-20260123",
+        "revision": "f889dab0532cfa4bf459f2a3367eb6d346b8eeda",
+        "license": "Apache-2.0",
+        "files": [
+          {
+            "path": "config.json",
+            "bytes": 981,
+            "sha256": "b55a505b4cf5cd22bba40aac0d9d5082d560c1c942fe17583aaa95f28e3c08cf"
+          },
+          {
+            "path": "model.safetensors.index.json",
+            "bytes": 83875,
+            "sha256": "d19153a142865e4a90508294f36c7ec5ab07d33bf0e8b01a0717c75b80ce6a63"
+          },
+          {
+            "path": "model-00001-of-00002.safetensors",
+            "bytes": 4930472472,
+            "sha256": "50d2c022468a0e127992d99e02117d2efbad2b10fddc8ceaf09550f154e185d4"
+          },
+          {
+            "path": "model-00002-of-00002.safetensors",
+            "bytes": 1707911436,
+            "sha256": "6f319d0f5b31858dfe98bd8fc89d3083cbfff74ac75a0531f1a7b86949197917"
+          }
+        ]
+      }
+    ]
+  }
+}

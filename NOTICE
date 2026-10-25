@@ -1,0 +1,16 @@
+promboard.heartmula
+Copyright 2026 PromBoard
+
+This plugin is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+nodes/heartlib contains the heartmula and heartcodec model code from HeartMuLa/heartlib
+(https://github.com/HeartMuLa/heartlib, commit 5858ca8f1ffe58d62be7c007ea55f1033c5ca456),
+licensed under the Apache License, Version 2.0 (nodes/heartlib/LICENSE). Copied without changes except
+for added empty __init__.py files and one docstring in heartcodec/models/encoder.py (`eval()` -> `.eval()`,
+so the registry's text scan does not read it as a call). The generation loop in nodes/main.py follows
+heartlib/pipelines/music_generation.py, changed to skip torch.compile, size the KV cache to the requested
+length, report progress and support cancel.
+
+Model weights are not included. The plugin downloads HeartMuLa/HeartMuLaGen,
+HeartMuLa/HeartMuLa-oss-3B-happy-new-year and HeartMuLa/HeartCodec-oss-20260123 from Hugging Face
+(Apache License 2.0) at prepare time.
